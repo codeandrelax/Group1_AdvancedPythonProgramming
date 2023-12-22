@@ -1,14 +1,47 @@
 
-from hash_module import hash_password
+import hash_module
+
+import multiprocessing
+import time
+
+manager = multiprocessing.Manager()
+logged_in_users = manager.list()
 
 registered_users = {}
+
+def logout(username):
+    with logged_in_users.get_lock():
+        if username in logged_in_users:
+            logged_in_users.remove(username)
+            print(f"User {username} is logged out.")
+        else:
+            print(f"User {username} is not logged in.")
+
+def login(username, password):
+    if not username in registered_users:
+        print("Error: User is not registered. Please try again.")
+        return
+    user = registered_users[username]
+    if not hash_module.check_password(user.password, password):
+        print("Error: Incorrect password. Please try again.")
+        return
+    login_process = multiprocessing.Process(target=login_simulation, args=(username,))
+    login_process.start()
+
+def login_simulation(username):
+    time.sleep(1)
+    if username not in logged_in_users:
+        logged_in_users.append(username)
+        print(f"User {username} is logged in.")
+    else:
+        print(f"User {username} is already logged in.")
 
 def register(username, password):
     if username in registered_users:
         print(f"User '{username}' already exists. Please choose a different username.")
         return None
 
-    hashed_password = hash_password(password)
+    hashed_password = hash_module.hash_password(password)
     user = User(username, hashed_password)
 
     registered_users[username] = user   
