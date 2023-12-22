@@ -1,5 +1,8 @@
 # Group1_AdvancedPythonProgramming
 
+PLEASE KEEP TRACK OF TASKS ON GIT BOARD.
+Commit message should start with #<task number>. That way it can be referenced to a task related with commit.
+
 To create new virtual environment use:
 ```python3 -m venv Group1_project_env```
 
