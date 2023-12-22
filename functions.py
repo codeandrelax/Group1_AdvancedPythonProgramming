@@ -1,4 +1,19 @@
 
+from hash_module import hash_password
+
+registered_users = {}
+
+def register(username, password):
+    if username in registered_users:
+        print(f"User '{username}' already exists. Please choose a different username.")
+        return None
+
+    hashed_password = hash_password(password)
+    user = User(username, hashed_password)
+
+    registered_users[username] = user   
+    print(f"User '{username}' registered successfully.")
+    return user
 
 class User:
 
@@ -8,7 +23,7 @@ class User:
         self._contacts = []
 
     def _validate_password(self, password):
-        if len(password) > 12 or not password.isdigit():
+        if len(password) > 12:# or not password.isdigit():
             raise ValueError("Password must be numeric and have a maximum length of 12")
         return password
     
@@ -48,23 +63,28 @@ class User:
         return iter(self._contacts)
     
 if __name__ == "__main__":
-    user = User("vedran", "1234567890")
+    registered_user1 = register("vedran", "1234567890")
+    registered_user2 = register("vedran", "9876543210")
 
-    print(f"Username: {user.username}")
-    print(f"Password: {user.password}")
-    user.password = "9876543210" 
-    print(f"New Password: {user.password}")
+    print("\nRegistered Users:")
+    for username, user in registered_users.items():
+        print(f"Username: {username}, Password: {user.password}, Contacts: {user.contacts if user.contacts else 'None'}")
 
-    user.add_contact("Aleksej")
-    user.add_contact("Filip")
-    user.add_contact("Damjan")
+    print(f"Username: {registered_user1.username}")
+    print(f"Password: {registered_user1.password}")
+    registered_user1.password = "9876543210" 
+    print(f"New Password: {registered_user1.password}")
 
-    print(f"Contacts: {user.contacts}")
-    print(f"Number of Contacts: {len(user)}")
+    registered_user1.add_contact("Aleksej")
+    registered_user1.add_contact("Filip")
+    registered_user1.add_contact("Damjan")
 
-    del user[1]
-    print(f"Contacts after deletion: {user.contacts}")
+    print(f"Contacts: {registered_user1.contacts}")
+    print(f"Number of Contacts: {len(registered_user1)}")
+
+    del registered_user1[1]
+    print(f"Contacts after deletion: {registered_user1.contacts}")
 
     print("\nIterating over contacts:")
-    for contact in user:
+    for contact in registered_user1:
         print(contact)
