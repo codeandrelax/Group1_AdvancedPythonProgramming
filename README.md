@@ -9,9 +9,13 @@ To use a virtual environment (in Linux):
 File structure for extension hash_module:
 
 project/
+
 ├── hash_module/
+
 │   ├── hash.c
+
 │   └── setup.py
+
 └── test_hash_module.py
 
 To intall module into environment use:
