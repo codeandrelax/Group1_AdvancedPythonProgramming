@@ -10,13 +10,10 @@ File structure for extension hash_module:
 
 project/
 
-├── hash_module/
-
-│   ├── hash.c
-
-│   └── setup.py
-
-└── test_hash_module.py
+├── hash_module/<br>
+│   ├── hash.c<br>
+│   └── setup.py<br>
+└── test_hash_module.py<br>
 
 To intall module into environment use:
 ```python3 setup.py install```
