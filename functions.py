@@ -62,6 +62,16 @@ def remove_contact(user,contact_name):
         else:
             print(f"User {user.username} is not logged in.")
 
+def add_contact(user,contact_name):
+    with logged_in_users_lock:
+        if user.username in logged_in_users:
+            if contact_name in user.contacts:
+                print("Contact already exists")
+            else:
+                user.contacts=contact_name       
+        else:
+            print(f"User {user.username} is not logged in.")
+
 class User:
 
     def __init__(self, username, password):
@@ -93,8 +103,9 @@ class User:
     @property
     def contacts(self):
         return self._contacts
-    
-    def add_contact(self, contact):
+
+    @contacts.setter
+    def contacts(self, contact):
         self._contacts.append(contact)
 
     def __delitem__(self, index):
@@ -117,18 +128,19 @@ if __name__ == "__main__":
     for username, user in registered_users.items():
         print(f"Username: {username}, Password: {user.password}, Contacts: {user.contacts if user.contacts else 'None'}")
 
+    login("vedran", "1234567890")
     print(f"Username: {registered_user1.username}")
     print(f"Password: {registered_user1.password}")
     #registered_user1.password = "9876543210" 
     print(f"New Password: {registered_user1.password}")
 
-    registered_user1.add_contact("Aleksej")
-    registered_user1.add_contact("Filip")
-    registered_user1.add_contact("Damjan")
+    add_contact(registered_user1,"Aleksej")
+    add_contact(registered_user1,"Filip")
+    add_contact(registered_user1,"Damjan")
 
     print(f"Contacts: {registered_user1.contacts}")
     print(f"Number of Contacts: {len(registered_user1)}")
-    login("vedran", "1234567890")
+  
     remove_contact(registered_user1,"Filip")
     print(f"Contacts after deletion: {registered_user1.contacts}")
 
