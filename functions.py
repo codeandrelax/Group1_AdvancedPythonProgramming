@@ -4,13 +4,13 @@ import hash_module
 import multiprocessing
 import time
 
-manager = multiprocessing.Manager()
-logged_in_users = manager.list()
+logged_in_users_lock = multiprocessing.Lock()
+logged_in_users = []
 
 registered_users = {}
 
 def logout(username):
-    with logged_in_users.get_lock():
+    with logged_in_users_lock.lock:
         if username in logged_in_users:
             logged_in_users.remove(username)
             print(f"User {username} is logged out.")
@@ -18,15 +18,16 @@ def logout(username):
             print(f"User {username} is not logged in.")
 
 def login(username, password):
-    if not username in registered_users:
-        print("Error: User is not registered. Please try again.")
-        return
-    user = registered_users[username]
-    if not hash_module.check_password(user.password, password):
-        print("Error: Incorrect password. Please try again.")
-        return
-    login_process = multiprocessing.Process(target=login_simulation, args=(username,))
-    login_process.start()
+    with logged_in_users_lock.lock:
+        if not username in registered_users:
+            print("Error: User is not registered. Please try again.")
+            return
+        user = registered_users[username]
+        if not hash_module.check_password(user.password, password):
+            print("Error: Incorrect password. Please try again.")
+            return
+        login_process = multiprocessing.Process(target=login_simulation, args=(username,))
+        login_process.start()
 
 def login_simulation(username):
     time.sleep(1)
