@@ -72,6 +72,16 @@ def add_contact(user,contact_name):
         else:
             print(f"User {user.username} is not logged in.")
 
+def print_contact(user):
+    with logged_in_users_lock:
+        if user.username in logged_in_users:
+            print(f"{user.username}'s contact list:")
+            for con in user.contacts:
+                print(con)
+            print(f"End of {user.username}'s contact list")    
+        else:
+            print(f"User {user.username} is not logged in.")
+
 class User:
 
     def __init__(self, username, password):
@@ -138,11 +148,14 @@ if __name__ == "__main__":
     add_contact(registered_user1,"Filip")
     add_contact(registered_user1,"Damjan")
 
-    print(f"Contacts: {registered_user1.contacts}")
+    print_contact(registered_user1)
     print(f"Number of Contacts: {len(registered_user1)}")
   
     remove_contact(registered_user1,"Filip")
-    print(f"Contacts after deletion: {registered_user1.contacts}")
+    print(f"Contacts after deletion:")
+    print_contact(registered_user1)
+
+
 
     print("\nIterating over contacts:")
     for contact in registered_user1:
