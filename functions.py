@@ -6,11 +6,10 @@ import time
 
 logged_in_users_lock = multiprocessing.Lock()
 logged_in_users = []
-
 registered_users = {}
 
 def logout(username):
-    with logged_in_users_lock.lock:
+    with logged_in_users_lock:
         if username in logged_in_users:
             logged_in_users.remove(username)
             print(f"User {username} is logged out.")
@@ -18,7 +17,7 @@ def logout(username):
             print(f"User {username} is not logged in.")
 
 def login(username, password):
-    with logged_in_users_lock.lock:
+    with logged_in_users_lock:
         if not username in registered_users:
             print("Error: User is not registered. Please try again.")
             return
@@ -26,16 +25,20 @@ def login(username, password):
         if not hash_module.check_password(user.password, password):
             print("Error: Incorrect password. Please try again.")
             return
-        login_process = multiprocessing.Process(target=login_simulation, args=(username,))
-        login_process.start()
+        if username not in logged_in_users:
+            logged_in_users.append(username)
+            login_process = multiprocessing.Process(target=login_simulation, args=(username,logged_in_users))
+            login_process.start()
+            login_process.join()
+        else:
+            print(f"User {username} is already logged in.")
 
-def login_simulation(username):
+
+def login_simulation(username,logged_in_users):
     time.sleep(1)
-    if username not in logged_in_users:
-        logged_in_users.append(username)
-        print(f"User {username} is logged in.")
-    else:
-        print(f"User {username} is already logged in.")
+    print(f"User {username} is logged in.")
+    
+    
 
 def register(username, password):
     if username in registered_users:
@@ -48,6 +51,16 @@ def register(username, password):
     registered_users[username] = user   
     print(f"User '{username}' registered successfully.")
     return user
+
+def remove_contact(user,contact_name):
+    with logged_in_users_lock:
+        if user.username in logged_in_users:
+            if contact_name in user.contacts:
+                del user[user.contacts.index(contact_name)]
+            else:
+                print("There is no requested contact")
+        else:
+            print(f"User {user.username} is not logged in.")
 
 class User:
 
@@ -106,7 +119,7 @@ if __name__ == "__main__":
 
     print(f"Username: {registered_user1.username}")
     print(f"Password: {registered_user1.password}")
-    registered_user1.password = "9876543210" 
+    #registered_user1.password = "9876543210" 
     print(f"New Password: {registered_user1.password}")
 
     registered_user1.add_contact("Aleksej")
@@ -115,8 +128,8 @@ if __name__ == "__main__":
 
     print(f"Contacts: {registered_user1.contacts}")
     print(f"Number of Contacts: {len(registered_user1)}")
-
-    del registered_user1[1]
+    login("vedran", "1234567890")
+    remove_contact(registered_user1,"Filip")
     print(f"Contacts after deletion: {registered_user1.contacts}")
 
     print("\nIterating over contacts:")
