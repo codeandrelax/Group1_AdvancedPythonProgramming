@@ -13,8 +13,10 @@ def logout(username):
         if username in logged_in_users:
             logged_in_users.remove(username)
             print(f"User {username} is logged out.")
+            return 0
         else:
             print(f"User {username} is not logged in.")
+            return -1
 
 def login(username, password):
     with logged_in_users_lock:
@@ -37,8 +39,6 @@ def login(username, password):
 def login_simulation(username,logged_in_users):
     time.sleep(1)
     print(f"User {username} is logged in.")
-    
-    
 
 def register(username, password):
     if username in registered_users:
@@ -56,11 +56,13 @@ def remove_contact(user,contact_name):
     with logged_in_users_lock:
         if user.username in logged_in_users:
             if contact_name in user.contacts:
-                del user[user.contacts.index(contact_name)]
+                del user.contacts[user.contacts.index(contact_name)]
             else:
                 print("There is no requested contact")
+                return -1
         else:
             print(f"User {user.username} is not logged in.")
+            return -1
 
 def add_contact(user,contact_name):
     with logged_in_users_lock:
@@ -68,9 +70,11 @@ def add_contact(user,contact_name):
             if contact_name in user.contacts:
                 print("Contact already exists")
             else:
-                user.contacts=contact_name       
+                user.contacts=contact_name    
+            return None   
         else:
             print(f"User {user.username} is not logged in.")
+            return -1
 
 def print_contact(user):
     with logged_in_users_lock:

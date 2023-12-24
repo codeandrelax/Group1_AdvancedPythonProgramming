@@ -108,11 +108,6 @@ class TestCalculatorModule(unittest.TestCase):
         self.assertTrue(username in registered_users)
         self.assertEqual(created_user.password,password)
 
-
-        
-
-
-
     def test_contact_getter_setter_deleter(self):
         print(registered_users)
         username="Vedran Jovanovic"
@@ -180,6 +175,52 @@ class TestCalculatorModule(unittest.TestCase):
         logout(user._username)
         self.assertEqual(len(logged_in_users), 0)
 
+    def test_add_contact_valid(self):
+        username="James Clerk Maxwell"
+        password="5555558"
+        user = register(username,password)
+        login(username, password)
+        add_contact(user, "Isac Newton")
+        self.assertEqual(user.contacts, ['Isac Newton'])
+        add_contact(user, 'Max Planck')
+        self.assertEqual(user.contacts, ['Isac Newton', 'Max Planck'])
+
+    def test_remove_contact_valid(self):
+        username="James Clerk Maxwell"
+        password="5555558"
+        user = register(username,password)
+        login(username, password)
+        add_contact(user, "Isac Newton")
+        add_contact(user, 'Max Planck')
+        add_contact(user, 'Erwin Rudolf Josef Alexander Schrodinger')
+        self.assertEqual(len(user._contacts), 3)
+        remove_contact(user, 'Max Planck')
+        self.assertEqual(len(user._contacts), 2)
+        remove_contact(user, 'Isac Newton')
+        self.assertEqual(len(user._contacts), 1)
+        remove_contact(user, 'Erwin Rudolf Josef Alexander Schrodinger')
+        self.assertEqual(len(user._contacts), 0)
+        e = remove_contact(user, 'Erwin Rudolf Josef Alexander Schrodinger')
+        self.assertEqual(e, -1)
+
+    def test_add_contact_with_not_logged_user(self):
+        username="James Clerk Maxwell"
+        password="5555559"
+        user = register(username,password)
+        e = add_contact(user, "Isac Newton")
+        self.assertEqual(e, -1)
+
+    def test_remove_contact_with_not_logged_user(self):
+        username="James Clerk Maxwell"
+        password="5555559"
+        user = register(username,password)  
+        login(username, password)    
+        add_contact(user, "Isac Newton")
+        add_contact(user, 'Max Planck')
+        add_contact(user, 'Erwin Rudolf Josef Alexander Schrodinger')
+        self.assertEqual(len(user._contacts), 3)  
+        logout(user._username)
+        remove_contact(user, 'Max Planck')
 
 if __name__ == '__main__':
     unittest.main()
