@@ -82,7 +82,8 @@ def print_contact(user):
             print(f"{user.username}'s contact list:")
             for con in user.contacts:
                 print(con)
-            print(f"End of {user.username}'s contact list")    
+            print(f"End of {user.username}'s contact list") 
+            return None    
         else:
             print(f"User {user.username} is not logged in.")
 

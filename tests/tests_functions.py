@@ -220,7 +220,18 @@ class TestCalculatorModule(unittest.TestCase):
         add_contact(user, 'Erwin Rudolf Josef Alexander Schrodinger')
         self.assertEqual(len(user._contacts), 3)  
         logout(user._username)
-        remove_contact(user, 'Max Planck')
+        e = remove_contact(user, 'Max Planck')
+        self.assertEqual(e, -1)
+
+    # def test_print_contact(self):
+    #     username="James Clerk Maxwell"
+    #     password="5555559"
+    #     user = register(username,password)  
+    #     login(username, password)  
+    #     add_contact(user, 'Max Planck')
+    #     add_contact(user, 'Erwin Rudolf Josef Alexander Schrodinger')
+    #     add_contact(user, 'Niels Bohr')
+    #     print_contact(user)
 
 if __name__ == '__main__':
     unittest.main()
