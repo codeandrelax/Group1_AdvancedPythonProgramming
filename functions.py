@@ -1,6 +1,6 @@
 
 import hash_module
-
+ 
 import multiprocessing
 import time
 
@@ -20,11 +20,11 @@ def login(username, password):
     with logged_in_users_lock:
         if not username in registered_users:
             print("Error: User is not registered. Please try again.")
-            return
+            return -1
         user = registered_users[username]
         if not hash_module.check_password(user.password, password):
             print("Error: Incorrect password. Please try again.")
-            return
+            return -1
         if username not in logged_in_users:
             logged_in_users.append(username)
             login_process = multiprocessing.Process(target=login_simulation, args=(username,logged_in_users))
@@ -118,8 +118,12 @@ class User:
     def contacts(self, contact):
         self._contacts.append(contact)
 
-    def __delitem__(self, index):
+    @contacts.deleter
+    def contacts(self, index):
         del self._contacts[index]
+
+    # def __delitem__(self, index):
+    #     del self._contacts[index]
 
     def __len__(self):
         return len(self._contacts)
@@ -148,10 +152,12 @@ if __name__ == "__main__":
     add_contact(registered_user1,"Filip")
     add_contact(registered_user1,"Damjan")
 
+    print(registered_user1)
+
     print_contact(registered_user1)
     print(f"Number of Contacts: {len(registered_user1)}")
   
-    remove_contact(registered_user1,"Filip")
+    remove_contact(registered_user1,1)
     print(f"Contacts after deletion:")
     print_contact(registered_user1)
 
