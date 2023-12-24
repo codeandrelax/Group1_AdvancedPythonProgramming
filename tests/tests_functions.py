@@ -62,7 +62,7 @@ class TestCalculatorModule(unittest.TestCase):
         user=User("Vedran",password)
         self.assertEqual(user.password,password)
 
-    def test_login_with_valid_parameters(self):
+    def test_login_with_valid_params(self):
         username="Vedran Jovanovic"
         password="1234567890"
         register(username, password)
@@ -86,6 +86,34 @@ class TestCalculatorModule(unittest.TestCase):
         password="987654321"
         login(username, password)
         self.assertTrue(username not in logged_in_users)
+    
+    def test_register_with_valid_params(self,):
+        username="Filip Adamovic"
+        password="1234567890"
+        register(username, password)
+        self.assertTrue(username in registered_users)
+
+    def test_register_with_invalid_params(self,):
+        username="Filip Adamovic"
+        password="1234567890987456test"
+        with self.assertRaises(ValueError):
+            register(username, password)
+
+    @patch("hash_module.hash_password")
+    @patch("functions.User._validate_password")
+    def test_register_with_hash_password_mock(self,mock_hash,mock_validate_password):
+        username="Filip Adamovic"
+        password="1234567890987456test"
+        mock_hash.return_value=password
+        mock_validate_password.return_value=password
+        created_user=register(username, password)
+        self.assertTrue(username in registered_users)
+        self.assertEqual(created_user.password,password)
+
+
+        
+
+
 
 
 if __name__ == '__main__':
