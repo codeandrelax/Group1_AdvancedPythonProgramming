@@ -4,13 +4,17 @@ import hash_module
 import sys
 sys.path.append("..")
 from functions import *
+from io import StringIO
 
 class TestCalculatorModule(unittest.TestCase):
 
     def setUp(self):
-        pass
+        self.hold_output = StringIO()
+        sys.stdout = self.hold_output
+        # pass
 
     def tearDown(self):
+        sys.stdout = sys.__stdout__
         logged_in_users.clear()
         registered_users.clear()
 
@@ -223,15 +227,42 @@ class TestCalculatorModule(unittest.TestCase):
         e = remove_contact(user, 'Max Planck')
         self.assertEqual(e, -1)
 
-    # def test_print_contact(self):
-    #     username="James Clerk Maxwell"
-    #     password="5555559"
-    #     user = register(username,password)  
-    #     login(username, password)  
-    #     add_contact(user, 'Max Planck')
-    #     add_contact(user, 'Erwin Rudolf Josef Alexander Schrodinger')
-    #     add_contact(user, 'Niels Bohr')
-    #     print_contact(user)
+    def test_print_contact(self):
+        username="James Clerk Maxwell"
+        password="5555559"
+        user = register(username,password)  
+        login(username, password)  
+        add_contact(user, 'Max Planck')
+        add_contact(user, 'Erwin Rudolf Josef Alexander Schrodinger')
+        add_contact(user, 'Niels Bohr')
+        text = "James Clerk Maxwell's contact list:" + "\n"\
+               "Max Planck" + "\n"\
+               "Erwin Rudolf Josef Alexander Schrodinger" + "\n"\
+               "Niels Bohr" + "\n"\
+               "End of James Clerk Maxwell's contact list"
+        self.hold_output = StringIO()
+        sys.stdout = self.hold_output
+        print_contact(user)
+        printed_output = self.hold_output.getvalue().strip()
+        self.assertEqual(printed_output, text)
+        sys.stdout = sys.__stdout__
+
+    def test_print_contact_with_not_logged_uset(self):
+        username="James Clerk Maxwell"
+        password="5555559"
+        user = register(username,password)  
+        login(username, password)  
+        add_contact(user, 'Max Planck')
+        add_contact(user, 'Erwin Rudolf Josef Alexander Schrodinger')
+        add_contact(user, 'Niels Bohr')
+        logout(user._username)
+        text = "User James Clerk Maxwell is not logged in."
+        self.hold_output = StringIO()
+        sys.stdout = self.hold_output
+        print_contact(user)
+        printed_output = self.hold_output.getvalue().strip()
+        self.assertEqual(printed_output, text)
+        sys.stdout = sys.__stdout__
 
 if __name__ == '__main__':
     unittest.main()

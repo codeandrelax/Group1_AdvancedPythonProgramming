@@ -166,8 +166,6 @@ if __name__ == "__main__":
     print(f"Contacts after deletion:")
     print_contact(registered_user1)
 
-
-
     print("\nIterating over contacts:")
     for contact in registered_user1:
         print(contact)
