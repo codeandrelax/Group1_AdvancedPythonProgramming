@@ -1,4 +1,6 @@
 
+from asyncio.windows_events import NULL
+from pydoc import doc
 import hash_module
  
 import multiprocessing
@@ -87,6 +89,68 @@ def print_contact(user):
         else:
             print(f"User {user.username} is not logged in.")
 
+def input_credentials():
+    username=input("Enter username: ")
+    password=input("Enter password: ")
+    return username, password
+
+def select_online_users():
+    print("Online users:")
+    print("-"*20)
+
+    if len(logged_in_users)==0:
+        print("List is empty")
+        return
+    else:
+        for order,user in enumerate(logged_in_users,start=1):
+                print(f"{user.ljust(20 - len(str(order)))}{str(order).rjust(len(str(order)))}")
+        print("-"*20)
+        usr_num=""
+        while True:
+            try:
+                usr_num=int(input("Enter number of user you want to select: "))
+
+                if usr_num < 1 or usr_num >len(logged_in_users):
+                    raise ValueError
+                else:
+                    break
+
+            except (ValueError):
+                print("Invalid input! Try again")
+
+        print("-"*20)
+        return registered_users[logged_in_users[(usr_num)-1]]
+
+def input_contact_for_user(reg_usr):
+    contact=input(f"Enter contact name for {reg_usr}'s contact list: ")
+    add_result=add_contact(reg_usr,contact)
+    if add_result != -1:
+        print("Contact successfully added")
+
+def print_contacts_for_user(reg_usr):
+        print_contact(reg_usr)
+
+def remove_contacts_for_user(reg_usr):
+        if len(reg_usr.contacts) == 0:
+            print("List of contacts is empty")
+            return -1
+        else:
+            print_contact(reg_usr)
+            usr_for_del=input("Enter name of contact you want to delete: ")
+            del_res=remove_contact(reg_usr,usr_for_del)
+            if(del_res != -1):
+                print("Contact removed successfully")
+
+def print_online_users():
+    print("-"*10,"Online users","-"*10)
+    if len(logged_in_users)==0:
+        print("There is no online users \n")
+        return -1
+    else:
+        for usr in logged_in_users:
+            print(usr)
+    print("-"*10,"-"*10)
+
 class User:
 
     def __init__(self, username, password):
@@ -138,34 +202,38 @@ class User:
 
     def __iter__(self):
         return iter(self._contacts)
-    
-if __name__ == "__main__":
-    registered_user1 = register("vedran", "1234567890")
-    registered_user2 = register("vedran", "9876543210")
 
-    print("\nRegistered Users:")
-    for username, user in registered_users.items():
-        print(f"Username: {username}, Password: {user.password}, Contacts: {user.contacts if user.contacts else 'None'}")
+# if __name__ == "__main__":
+    # registered_user1 = register("vedran", "1234567890")
+    # registered_user2 = register("vedran", "9876543210")
 
-    login("vedran", "1234567890")
-    print(f"Username: {registered_user1.username}")
-    print(f"Password: {registered_user1.password}")
-    #registered_user1.password = "9876543210" 
-    print(f"New Password: {registered_user1.password}")
+    # print("\nRegistered Users:")
+    # for username, user in registered_users.items():
+    #     print(f"Username: {username}, Password: {user.password}, Contacts: {user.contacts if user.contacts else 'None'}")
 
-    add_contact(registered_user1,"Aleksej")
-    add_contact(registered_user1,"Filip")
-    add_contact(registered_user1,"Damjan")
+    # login("vedran", "1234567890")
+    # print(f"Username: {registered_user1.username}")
+    # print(f"Password: {registered_user1.password}")
+    # #registered_user1.password = "9876543210" 
+    # print(f"New Password: {registered_user1.password}")
 
-    print(registered_user1)
+    # add_contact(registered_user1,"Aleksej")
+    # add_contact(registered_user1,"Filip")
+    # add_contact(registered_user1,"Damjan")
 
-    print_contact(registered_user1)
-    print(f"Number of Contacts: {len(registered_user1)}")
+    # print(registered_user1)
+
+    # print_contact(registered_user1)
+    # print(f"Number of Contacts: {len(registered_user1)}")
   
-    remove_contact(registered_user1,1)
-    print(f"Contacts after deletion:")
-    print_contact(registered_user1)
+    # remove_contact(registered_user1,1)
+    # print(f"Contacts after deletion:")
+    # print_contact(registered_user1)
 
-    print("\nIterating over contacts:")
-    for contact in registered_user1:
-        print(contact)
+    # print("\nIterating over contacts:")
+    # for contact in registered_user1:
+    #     print(contact)
+
+
+
+  
