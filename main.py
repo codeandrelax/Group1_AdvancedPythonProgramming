@@ -33,25 +33,25 @@ if __name__ == "__main__":
             login(username,password)
 
         elif option_num == 3:
-            reg_user=NULL
+            reg_user=None
             reg_user=select_online_users()
-            if reg_user != NULL:
+            if reg_user != None:
                 input_contact_for_user(reg_user)
             else:
                 print("Add contact ERROR: cannot find user")
             
         elif option_num == 4:
-            reg_user=NULL
+            reg_user=None
             reg_user=select_online_users()
-            if reg_user != NULL:
+            if reg_user != None:
                 print_contacts_for_user(reg_user)
             else:
                 print("Print contacts ERROR: cannot find user")
         
         elif option_num == 5:
-            reg_user=NULL
+            reg_user=None
             reg_user=select_online_users()
-            if reg_user != NULL:
+            if reg_user != None:
                 remove_contacts_for_user(reg_user)
             else:
                 print("remove contacts ERROR: cannot find user")
