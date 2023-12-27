@@ -42,15 +42,16 @@ def login_simulation(username,logged_in_users):
     time.sleep(1)
     print(f"User {username} is logged in.")
 
+
+def validate_password(password):
+    if len(password) > 12 or not password.isdigit():
+        raise ValueError("Password must be numeric and have a maximum length of 12")
+    return password
+
 def register(username, password):
     if username in registered_users:
         print(f"User '{username}' already exists. Please choose a different username.")
         return None
-
-    def validate_password(self, password):
-        if len(password) > 12 or not password.isdigit():
-            raise ValueError("Password must be numeric and have a maximum length of 12")
-        return password
 
     hashed_password = hash_module.hash_password(validate_password(password))
     user = User(username, hashed_password)

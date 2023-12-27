@@ -25,9 +25,9 @@ class TestCalculatorModule(unittest.TestCase):
   
     def test_register_invalid_password_length(self,):
         with self.assertRaises(ValueError):
-            user = User("testUser","1234567891234")
+            register("testUser","1234567891234")
         
-    @patch("functions.User._validate_password")
+    @patch("functions.validate_password")
     def test_register_invalid_password_length_pass_with_mock(self,mock_validate):
         username="testUser"
         invalid_password="1234567891234"
@@ -54,10 +54,10 @@ class TestCalculatorModule(unittest.TestCase):
         self.assertEqual(user.username,username)
 
     def test_password_setter(self):
-        password="321"
-        user=User("Vedran","123")
-        user.password=password
-        self.assertEqual(user.password,password)
+        user=User("Vedran","1")
+        has_pass=hash_module.hash_password("123")
+        user.password="123"
+        self.assertEqual(user.password,has_pass)
 
     def test_password_getter(self):
         password="321"
@@ -102,7 +102,7 @@ class TestCalculatorModule(unittest.TestCase):
             register(username, password)
 
     @patch("hash_module.hash_password")
-    @patch("functions.User._validate_password")
+    @patch("functions.validate_password")
     def test_register_with_hash_password_mock(self,mock_hash,mock_validate_password):
         username="Filip Adamovic"
         password="1234567890987456test"
