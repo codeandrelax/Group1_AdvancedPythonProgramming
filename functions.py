@@ -47,7 +47,12 @@ def register(username, password):
         print(f"User '{username}' already exists. Please choose a different username.")
         return None
 
-    hashed_password = hash_module.hash_password(password)
+    def validate_password(self, password):
+        if len(password) > 12 or not password.isdigit():
+            raise ValueError("Password must be numeric and have a maximum length of 12")
+        return password
+
+    hashed_password = hash_module.hash_password(validate_password(password))
     user = User(username, hashed_password)
 
     registered_users[username] = user   
@@ -155,11 +160,11 @@ class User:
 
     def __init__(self, username, password):
         self._username = username
-        self._password = self._validate_password(password)
+        self._password = password#self._validate_password(password) - hashed password is already validated
         self._contacts = []
 
     def _validate_password(self, password):
-        if len(password) > 12:# or not password.isdigit():
+        if len(password) > 12 or not password.isdigit():
             raise ValueError("Password must be numeric and have a maximum length of 12")
         return password
     
@@ -177,7 +182,7 @@ class User:
 
     @password.setter
     def password(self, new_password):
-        self._password = self._validate_password(new_password)
+        self._password = hash_module.hash_password(self._validate_password(new_password))
 
     @property
     def contacts(self):
