@@ -2,6 +2,7 @@
 from pydoc import doc
 from usrmgm_library import *
 import multiprocessing
+import hash_module
 import time
 
 logged_in_users_lock = multiprocessing.Lock()
