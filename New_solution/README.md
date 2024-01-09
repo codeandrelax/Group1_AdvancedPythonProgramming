@@ -1,12 +1,3 @@
-Metadata-Version: 2.1
-Name: usrmgmt-library
-Version: 1.0
-Summary: Python library for user management with password hashing
-Home-page: UNKNOWN
-Author: Group1 Advanced Python
-License: UNKNOWN
-Platform: UNKNOWN
-
 # User Management Library
  
 ## Overview
@@ -22,4 +13,3 @@ The User Management library is a comprehensive solution for managing user accoun
 ## Installation
  
 To use this library, clone the repository and install it in your Python environment:
-
