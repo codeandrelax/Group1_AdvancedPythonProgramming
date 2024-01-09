@@ -1,0 +1,8 @@
+setup.py
+usrmgm_library/__init__.py
+usrmgm_library/functions.py
+usrmgm_library/hash.c
+usrmgmt_library.egg-info/PKG-INFO
+usrmgmt_library.egg-info/SOURCES.txt
+usrmgmt_library.egg-info/dependency_links.txt
+usrmgmt_library.egg-info/top_level.txt
