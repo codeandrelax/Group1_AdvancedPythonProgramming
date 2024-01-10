@@ -4,7 +4,7 @@ from unittest.mock import patch
 from usrmgm_library import *
 from io import StringIO
 
-class TestCalculatorModule(unittest.TestCase):
+class TestUserManagement(unittest.TestCase):
 
     def setUp(self):
         self.hold_output = StringIO()
